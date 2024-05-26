@@ -1,0 +1,3 @@
+name: BetterPrivateMines
+version: '${version}'
+main: fr.robotv2.betterprivatemines.BetterPrivateMines

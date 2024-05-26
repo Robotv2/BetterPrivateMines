@@ -1,0 +1,14 @@
+mine_world: "mine_world"
+
+mines:
+  mine_1:
+    schematic: prison1.schem
+    initial_size: 3
+    positions:
+      mine_corner: BLUE_WOOL
+    reset:
+      type: GRADUAL
+      max_block_per_tick: 20
+    materials:
+      STONE: 80
+      COBBLESTONE: 20
