@@ -1,9 +1,8 @@
 package fr.robotv2.betterprivatemines;
 
 import com.google.gson.Gson;
-import fr.robotv2.betterprivatemines.mine.PrivateMineManager;
-import fr.robotv2.betterprivatemines.schematic.SchematicManager;
-import fr.robotv2.betterprivatemines.world.WorldManager;
+import fr.robotv2.api.grid.Grid;
+import fr.robotv2.betterprivatemines.world.BukkitWorldManager;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -14,9 +13,9 @@ public final class BetterPrivateMines extends JavaPlugin {
 
     private final static Gson gson = new Gson();
 
-    private PrivateMineManager privateMineManager;
-    private WorldManager worldManager;
-    private SchematicManager schematicManager;
+    private BukkitWorldManager bukkitWorldManager;
+
+    private Grid grid;
 
     public static BetterPrivateMines instance() {
         return JavaPlugin.getPlugin(BetterPrivateMines.class);
@@ -37,23 +36,18 @@ public final class BetterPrivateMines extends JavaPlugin {
             getDataFolder().mkdir();
         }
 
-        this.privateMineManager = new PrivateMineManager(this);
-        this.worldManager = new WorldManager(this);
-        this.schematicManager = new SchematicManager(this);
-
-        getPrivateMineManager().loadConfigurations(getConfig().getConfigurationSection("mines"));
-        getSchematicManager().loadSchematics();
+        this.bukkitWorldManager = new BukkitWorldManager(this);
     }
 
     @Override
     public void onDisable() {
-        reloadConfig();
-        getSchematicManager().saveSchematicPlacement();
     }
 
     public void onReload() {
         reloadConfig();
-        getPrivateMineManager().loadConfigurations(getConfig().getConfigurationSection("mines"));
-        getSchematicManager().loadSchematics();
+    }
+
+    public void createGrid() {
+
     }
 }
