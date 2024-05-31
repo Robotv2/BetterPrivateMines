@@ -1,7 +1,7 @@
 package fr.robotv2.api.bucket.factory;
 
-import fr.robotv2.api.bucket.partitioning.PartitioningStrategy;
 import fr.robotv2.api.bucket.AbstractBucket;
+import fr.robotv2.api.bucket.partitioning.PartitioningStrategy;
 
 import java.util.Collections;
 import java.util.HashSet;

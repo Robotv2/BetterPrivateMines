@@ -1,7 +1,6 @@
 package fr.robotv2.api.vector;
 
 import fr.robotv2.api.bucket.Bucket;
-import fr.robotv2.api.bucket.BucketPartition;
 import fr.robotv2.api.bucket.factory.BucketFactory;
 import fr.robotv2.api.bucket.partitioning.PartitioningStrategies;
 import lombok.Getter;

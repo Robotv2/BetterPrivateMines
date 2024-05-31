@@ -6,6 +6,7 @@ import fr.robotv2.api.reset.MineResetInterface;
 import fr.robotv2.api.vector.BoundingBox;
 import lombok.Data;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Data
@@ -24,6 +25,8 @@ public class PrivateMine {
     private final BoundingBox mineAreaBox;
 
     private BoundingBox mineableAreaBox = null;
+
+    private String mineName;
 
     private int size = 2;
 
@@ -64,5 +67,19 @@ public class PrivateMine {
 
     public void reset() {
         reset(getConfiguration().getResetType());
+    }
+
+    @Override
+    public boolean equals(Object object) {
+
+        if(object == this) {
+            return true;
+        }
+
+        if(!(object instanceof PrivateMine)) {
+            return false;
+        }
+
+        return Objects.equals(((PrivateMine) object).getMineId(), getMineId());
     }
 }

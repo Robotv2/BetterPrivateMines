@@ -25,5 +25,5 @@ public abstract class WorldEditAdapter {
 
     public abstract CompletableFuture<Void> fill(BoundingBox boundingBox);
 
-    public abstract void pasteSchematic(File file, String wordName, Position vector, CompletableFuture<BoundingBox> future);
+    public abstract void pasteSchematic(File file, Position vector, CompletableFuture<BoundingBox> future);
 }

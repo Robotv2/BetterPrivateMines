@@ -1,9 +1,9 @@
 package fr.robotv2.api.grid.impl;
 
-import fr.robotv2.betterprivatemines.schematic.placement.GridPosition;
-import fr.robotv2.betterprivatemines.schematic.placement.PositionResolver;
+import fr.robotv2.api.grid.GridPosition;
+import fr.robotv2.api.grid.GridPositionResolver;
 
-public class HelixGridPositionResolver implements PositionResolver {
+public class HelixGridPositionResolver implements GridPositionResolver {
 
     // default values
     private int step = 0;

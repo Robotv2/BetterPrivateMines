@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @AllArgsConstructor
 @Log
@@ -25,6 +24,8 @@ import java.util.logging.Logger;
 public final class PrivateMineFactory {
 
     public static final int Y_POSITION = 30;
+
+    private final PrivateMineManager privateMineManager;
 
     private final SchematicManager schematicManager;
 
@@ -39,12 +40,13 @@ public final class PrivateMineFactory {
 
         final CompletableFuture<BoundingBox> future = new CompletableFuture<>();
 
-        WorldEditAdapter.getWorldEditAdapter().pasteSchematic(schematicManager.getSchematic(configuration.getSchematicName()), worldManager.getMineWorldName(), position, future);
+        WorldEditAdapter.getWorldEditAdapter().pasteSchematic(schematicManager.getSchematic(configuration.getSchematicName()),position, future);
 
         return future.thenApply(boundingBox -> {
 
             final MinePosition minePosition = MinePositionProcessor.fromBoundingBox(boundingBox, processorConfig);
             final PrivateMine privateMine = new PrivateMine(playerId, configuration, minePosition, boundingBox);
+            privateMineManager.register(privateMine);
 
             return privateMine;
         }).exceptionally(throwable -> {

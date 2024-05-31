@@ -1,4 +1,4 @@
-package fr.robotv2.betterprivatemines;
+package fr.robotv2.betterprivatemines.util;
 
 import fr.robotv2.api.vector.Position;
 import lombok.experimental.UtilityClass;

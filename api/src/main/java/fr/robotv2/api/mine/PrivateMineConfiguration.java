@@ -2,12 +2,11 @@ package fr.robotv2.api.mine;
 
 import com.google.common.collect.BiMap;
 import fr.robotv2.api.material.MineMaterial;
+import fr.robotv2.api.position.MinePositionProcessorConfig;
 import fr.robotv2.api.position.MinePositionType;
 import fr.robotv2.api.reset.ResetType;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.io.File;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -28,7 +27,6 @@ public abstract class PrivateMineConfiguration<T> {
 
     protected final Map<MineMaterial, Double> materials;
 
-
     public MineMaterial getRandomMaterial() {
 
         final double total = materials.values().stream().mapToDouble(Double::doubleValue).sum();
@@ -43,4 +41,6 @@ public abstract class PrivateMineConfiguration<T> {
 
         return null;
     }
+
+    public abstract MinePositionProcessorConfig<T> getMineProcessorConfig();
 }

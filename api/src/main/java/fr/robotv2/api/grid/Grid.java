@@ -1,5 +1,6 @@
 package fr.robotv2.api.grid;
 
+import fr.robotv2.api.grid.impl.HelixGridPositionResolver;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,6 +20,10 @@ public class Grid implements java.io.Serializable {
     public Grid(GridPosition initial, GridPositionResolver resolver) {
         this.lastPosition = initial;
         this.positionResolver = resolver;
+    }
+
+    public static Grid createDefault() {
+        return new Grid(new GridPosition(0, 0), new HelixGridPositionResolver());
     }
 
     @NotNull

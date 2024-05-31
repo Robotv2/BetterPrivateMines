@@ -15,8 +15,8 @@ public class MinePosition {
         positions.put(type, position);
     }
 
-    public Optional<Position> getFirst(MinePositionType type) {
-        return positions.get(type).stream().findFirst();
+    public Position getFirst(MinePositionType type) {
+        return positions.get(type).stream().findFirst().orElseThrow(() -> new NullPointerException(type + " can't be empty."));
     }
 
     public BoundingBox toBoundingBox(MinePositionType type) {
