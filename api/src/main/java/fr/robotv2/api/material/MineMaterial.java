@@ -7,4 +7,5 @@ public interface MineMaterial {
 
     void place(final PrivateMine mine, final Position location);
 
+    String worldEditLiteral();
 }

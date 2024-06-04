@@ -1,5 +1,6 @@
 package fr.robotv2.api.worldedit;
 
+import fr.robotv2.api.mine.PrivateMineConfiguration;
 import fr.robotv2.api.vector.BoundingBox;
 import fr.robotv2.api.vector.Position;
 
@@ -23,7 +24,7 @@ public abstract class WorldEditAdapter {
         return adapter;
     }
 
-    public abstract CompletableFuture<Void> fill(BoundingBox boundingBox);
+    public abstract <T> CompletableFuture<Void> fill(BoundingBox boundingBox, PrivateMineConfiguration<T> configuration);
 
     public abstract void pasteSchematic(File file, Position vector, CompletableFuture<BoundingBox> future);
 }

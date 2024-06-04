@@ -11,6 +11,7 @@ import fr.robotv2.betterprivatemines.config.BukkitPrivateMineConfigurationManage
 import fr.robotv2.betterprivatemines.listener.SystemListeners;
 import fr.robotv2.betterprivatemines.world.BukkitWorldManager;
 import lombok.Getter;
+import org.bukkit.Location;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import revxrsal.commands.bukkit.BukkitCommandHandler;

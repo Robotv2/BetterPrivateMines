@@ -14,7 +14,7 @@ public enum ResetType implements MineResetInterface {
 
         @Override
         public CompletableFuture<Void> reset(PrivateMine mine) {
-            return WorldEditAdapter.getWorldEditAdapter().fill(mine.getMineableAreaBox());
+            return WorldEditAdapter.getWorldEditAdapter().fill(mine.getMineableAreaBox(), mine.getConfiguration());
         }
 
     },

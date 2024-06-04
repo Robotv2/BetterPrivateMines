@@ -36,4 +36,9 @@ public class BukkitMineMaterial implements MineMaterial {
 
         PositionAdapter.fromPosition(position).getBlock().setType(material.parseMaterial(), false);
     }
+
+    @Override
+    public String worldEditLiteral() {
+        return material.name();
+    }
 }
