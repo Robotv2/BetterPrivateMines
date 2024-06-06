@@ -37,7 +37,7 @@ jobs:
       run: docker push ${{ secrets.DOCKER_USERNAME }}/betterprivatemines:latest
 
     - name: Notify Discord
-      uses: Ilshidur/action-discord@v
+      uses: Ilshidur/action-discord@master
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       with:
