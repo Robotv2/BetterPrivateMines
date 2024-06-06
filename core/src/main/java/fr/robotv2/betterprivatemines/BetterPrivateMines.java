@@ -1,17 +1,19 @@
 package fr.robotv2.betterprivatemines;
 
+import com.cryptomorin.xseries.XMaterial;
+import fr.robotv2.adapter.LatestWorldEditAdapter;
 import fr.robotv2.api.grid.GridManager;
 import fr.robotv2.api.mine.PrivateMineConfiguration;
 import fr.robotv2.api.mine.PrivateMineFactory;
 import fr.robotv2.api.mine.PrivateMineManager;
 import fr.robotv2.api.schematic.SchematicManager;
+import fr.robotv2.api.worldedit.WorldEditAdapter;
 import fr.robotv2.betterprivatemines.command.BetterPrivateMinesCommand;
-import fr.robotv2.betterprivatemines.config.BukkitPrivateMineConfiguration;
 import fr.robotv2.betterprivatemines.config.BukkitPrivateMineConfigurationManager;
 import fr.robotv2.betterprivatemines.listener.SystemListeners;
+import fr.robotv2.betterprivatemines.material.BukkitMineMaterial;
 import fr.robotv2.betterprivatemines.world.BukkitWorldManager;
 import lombok.Getter;
-import org.bukkit.Location;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import revxrsal.commands.bukkit.BukkitCommandHandler;
@@ -34,6 +36,8 @@ public final class BetterPrivateMines extends JavaPlugin {
 
     private BukkitPrivateMineConfigurationManager configurationManager;
 
+    private WorldEditAdapter<XMaterial> worldEditAdapter;
+
     public static BetterPrivateMines instance() {
         return JavaPlugin.getPlugin(BetterPrivateMines.class);
     }
@@ -45,11 +49,14 @@ public final class BetterPrivateMines extends JavaPlugin {
             getDataFolder().mkdir();
         }
 
+        saveDefaultConfig();
+
         this.bukkitWorldManager = new BukkitWorldManager(this);
         this.schematicManager = new SchematicManager(new File(getDataFolder(), "schematics"));
         this.gridManager = new GridManager(new File(getDataFolder(), "world_state.json"));
         this.privateMineFactory = new PrivateMineFactory(privateMineManager, schematicManager, bukkitWorldManager, gridManager.getGrid());
         this.configurationManager = new BukkitPrivateMineConfigurationManager();
+        this.worldEditAdapter = new LatestWorldEditAdapter(mineMaterial -> mineMaterial instanceof BukkitMineMaterial ? ((BukkitMineMaterial) mineMaterial).getMaterial() : XMaterial.AIR);
 
         getSchematicManager().loadSchematics();
         getConfigurationManager().loadConfigurations(getConfig().getConfigurationSection("mines"));

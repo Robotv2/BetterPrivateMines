@@ -38,7 +38,7 @@ public class GradualResetTask extends TimerTask {
         for(Position position : partition) {
             final MineMaterial mineMaterial = mine.getConfiguration().getRandomMaterial();
             if(mineMaterial != null) {
-                mineMaterial.place(mine, position);
+                mineMaterial.place(position);
             }
         }
 

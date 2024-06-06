@@ -15,7 +15,7 @@ public class Grid implements java.io.Serializable {
     @Getter
     private final GridPositionResolver positionResolver;
 
-    private final ReentrantLock lock = new ReentrantLock();
+    private transient final ReentrantLock lock = new ReentrantLock();
 
     public Grid(GridPosition initial, GridPositionResolver resolver) {
         this.lastPosition = initial;

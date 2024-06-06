@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 @UtilityClass
 public class MaterialUtil {
     @NotNull
-    public XMaterial matchXMaterialOrThrow(String literal) {
-        return XMaterial.matchXMaterial(literal).orElseThrow(() -> new NullPointerException(literal + " is not a valid material type."));
+    public XMaterial matchXMaterialOrThrow(@NotNull String literal) {
+        return XMaterial.matchXMaterial(literal.toUpperCase()).orElseThrow(() -> new NullPointerException(literal + " is not a valid material type."));
     }
 }
