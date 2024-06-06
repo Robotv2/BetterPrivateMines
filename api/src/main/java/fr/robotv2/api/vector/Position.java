@@ -16,4 +16,11 @@ public class Position implements java.io.Serializable {
         return Position.of(worldName, (this.X - x), (this.Y - y), (this.Z - z));
     }
 
+    public Position add(double x, double y, double z) {
+        return Position.of(worldName, this.X + x, this.Y + y, this.Z + z);
+    }
+
+    public Position center() {
+        return Position.of(worldName, this.X / 2, this.Y / 2, this.Z / 2);
+    }
 }
