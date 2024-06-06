@@ -8,7 +8,9 @@ import fr.robotv2.api.reset.ResetType;
 import lombok.Data;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 @Data
 public abstract class PrivateMineConfiguration<T> {
@@ -28,11 +30,19 @@ public abstract class PrivateMineConfiguration<T> {
     protected final Map<MineMaterial, Double> materials;
 
     public MineMaterial getRandomMaterial() {
+        return getRandomMaterial(getMaterials().entrySet());
+    }
 
-        final double total = materials.values().stream().mapToDouble(Double::doubleValue).sum();
+    public MineMaterial getRandomMaterial(Class<? extends MineMaterial> clazz) {
+        return getRandomMaterial(getMaterials().entrySet().stream().filter(entry -> clazz.isAssignableFrom(entry.getKey().getClass())).collect(Collectors.toSet()));
+    }
+
+    private MineMaterial getRandomMaterial(Set<Map.Entry<MineMaterial, Double>> entries) {
+
+        final double total = entries.stream().mapToDouble(Map.Entry::getValue).sum();
         double random = ThreadLocalRandom.current().nextDouble(total);
 
-        for (Map.Entry<MineMaterial, Double> entry : materials.entrySet()) {
+        for (Map.Entry<MineMaterial, Double> entry : entries) {
             random -= entry.getValue();
             if (random <= 0) {
                 return entry.getKey();
