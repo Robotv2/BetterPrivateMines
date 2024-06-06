@@ -23,7 +23,7 @@ public class SystemListeners implements Listener {
 
     private final BetterPrivateMines plugin;
 
-    @EventHandler(priority = EventPriority.MONITOR) // in case player is teleported on connection
+    @EventHandler(priority = EventPriority.MONITOR) // in case, player is teleported on connection
     public void onJoin(final PlayerJoinEvent event) {
 
         final Position position = PositionAdapter.toPosition(event.getPlayer().getLocation());

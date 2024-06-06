@@ -12,7 +12,6 @@ import fr.robotv2.api.world.WorldManager;
 import fr.robotv2.api.worldedit.WorldEditAdapter;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -20,7 +19,6 @@ import java.util.logging.Level;
 
 @AllArgsConstructor
 @Log
-@Slf4j
 public final class PrivateMineFactory {
 
     public static final int Y_POSITION = 30;

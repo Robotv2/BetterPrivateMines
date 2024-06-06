@@ -5,7 +5,6 @@ import fr.robotv2.api.vector.BoundingBox;
 import fr.robotv2.api.vector.Position;
 
 import java.util.List;
-import java.util.Optional;
 
 public class MinePosition {
 
