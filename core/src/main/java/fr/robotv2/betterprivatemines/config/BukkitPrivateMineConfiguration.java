@@ -20,7 +20,7 @@ public class BukkitPrivateMineConfiguration extends PrivateMineConfiguration<XMa
                 section.getInt("initial_size"),
                 ConfigurationUtil.loadBiMap(
                         section.getConfigurationSection("positions"),
-                        MinePositionType::valueOf,
+                        literal -> MinePositionType.valueOf(literal.toUpperCase()),
                         MaterialUtil::matchXMaterialOrThrow
                 ),
                 ResetType.resolveType(section.getString("reset.type"), ResetType.FULL),
