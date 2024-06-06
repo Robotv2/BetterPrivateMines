@@ -1,0 +1,47 @@
+name: "ci"
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  build_plugin:
+    runs-on: ubuntu-latest
+    steps:
+    
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v2
+      with:
+        java-version: '17'
+        distribution: 'adopt'
+
+    - name: Clean, package, and install
+      run: ./mvnw clean package install
+
+    - name: Build Docker image
+      run: docker build -t betterprivatemines:latest .
+
+    - name: Log in to Docker Hub
+      if: success()
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+    - name: Push Docker image
+      if: success()
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/betterprivatemines:latest
+
+    - name: Notify Discord
+      if: always()
+      uses: Ilshidur/action-discord@v1.5.0
+      with:
+        webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+        message: |
+          Build ${{ job.status }} for ${{ github.repository }} on branch ${{ github.ref }}.
+          Commit: ${{ github.sha }}
+
