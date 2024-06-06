@@ -23,7 +23,7 @@ jobs:
         distribution: 'adopt'
 
     - name: Clean, package, and install
-      run: ./mvnw clean package install
+      run: ./mvn clean package install
 
     - name: Build Docker image
       run: docker build -t betterprivatemines:latest .
