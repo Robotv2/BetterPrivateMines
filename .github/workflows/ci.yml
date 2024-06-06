@@ -37,11 +37,11 @@ jobs:
       run: docker push ${{ secrets.DOCKER_USERNAME }}/betterprivatemines:latest
 
     - name: Notify Discord
-      if: always()
-      uses: Ilshidur/action-discord@v1.5.0
+      uses: Ilshidur/action-discord@v
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       with:
-        webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
-        message: |
+        args: |
           Build ${{ job.status }} for ${{ github.repository }} on branch ${{ github.ref }}.
           Commit: ${{ github.sha }}
 
