@@ -13,6 +13,7 @@
         <module>dist</module>
         <module>api</module>
         <module>worldedit-latest</module>
+        <module>worldedit-6.1.9</module>
     </modules>
 
     <properties>
