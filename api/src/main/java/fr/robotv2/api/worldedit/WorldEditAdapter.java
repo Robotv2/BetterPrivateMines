@@ -12,7 +12,7 @@ import java.util.function.Function;
 
 public abstract class WorldEditAdapter<T> {
 
-    private static WorldEditAdapter<?> adapter;
+    private static WorldEditAdapter<?> adapter = null;
     protected final Function<MineMaterial, T> resolver;
 
     public WorldEditAdapter(Function<MineMaterial, T> resolver) {
@@ -21,7 +21,7 @@ public abstract class WorldEditAdapter<T> {
 
     public static <T> void setWorldEditAdapter(WorldEditAdapter<T> adapter) {
 
-        if(adapter != null) {
+        if(WorldEditAdapter.adapter != null) {
             throw new RuntimeException("Can't change adapter during runtime.");
         }
 

@@ -28,6 +28,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
@@ -117,6 +118,7 @@ public class LatestWorldEditAdapter extends WorldEditAdapter<XMaterial> {
     public void pasteSchematic(File file, Position vector, CompletableFuture<BoundingBox> future) {
 
         if(!file.exists()) {
+            future.completeExceptionally(new FileNotFoundException("schematic file"));
             return;
         }
 
@@ -168,9 +170,9 @@ public class LatestWorldEditAdapter extends WorldEditAdapter<XMaterial> {
                     future.complete(boundingBox);
                 }
             }
-        } catch (IOException | WorldEditException e) {
-            e.printStackTrace();
-            future.completeExceptionally(e);
+        } catch (IOException | WorldEditException exception) {
+            exception.printStackTrace();
+            future.completeExceptionally(exception);
         }
     }
 }
