@@ -5,35 +5,16 @@ import fr.robotv2.api.grid.GridPositionResolver;
 
 public class HelixGridPositionResolver implements GridPositionResolver {
 
+    public static final int BLOCK_DISTANCE = 150;
+
     // default values
     private int step = 0;
     private int direction = 0;
-    private int distance = 1;
+    private int distance = 1; // Distance in terms of steps, not blocks
     private int x = 0;
     private int z = 0;
     private int dx = 1;
     private int dz = 0;
-
-//    public static HelixPositionResolver fromState(JsonElement element) {
-//
-//        final HelixPositionResolver resolver = new HelixPositionResolver();
-//
-//        if(element == null) {
-//            return resolver;
-//        }
-//
-//        final JsonObject json = element.getAsJsonObject();
-//
-//        resolver.step = json.get("step").getAsInt();
-//        resolver.direction = json.get("direction").getAsInt();
-//        resolver.distance = json.get("distance").getAsInt();
-//        resolver.x = json.get("x").getAsInt();
-//        resolver.z = json.get("z").getAsInt();
-//        resolver.dx = json.get("dx").getAsInt();
-//        resolver.dz = json.get("dz").getAsInt();
-//
-//        return resolver;
-//    }
 
     @Override
     public GridPosition next(GridPosition lastPos) {
@@ -43,6 +24,10 @@ public class HelixGridPositionResolver implements GridPositionResolver {
         }
 
         step++;
+
+        // Increment x and z based on current direction
+        x += dx * BLOCK_DISTANCE;
+        z += dz * BLOCK_DISTANCE;
 
         if (step == distance) {
             step = 0;
@@ -56,9 +41,9 @@ public class HelixGridPositionResolver implements GridPositionResolver {
             }
         }
 
-        x += dx;
-        z += dz;
-
         return new GridPosition(x, z);
     }
 }
+
+
+

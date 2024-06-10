@@ -10,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import revxrsal.commands.annotation.Command;
-import revxrsal.commands.annotation.Named;
-import revxrsal.commands.annotation.Optional;
-import revxrsal.commands.annotation.Subcommand;
+import revxrsal.commands.annotation.*;
 import revxrsal.commands.bukkit.BukkitCommandActor;
 import revxrsal.commands.bukkit.annotation.CommandPermission;
 
@@ -36,6 +33,7 @@ public class BetterPrivateMinesCommand {
 
     @Subcommand("create")
     @CommandPermission("betterprivatemines.command.create")
+    @AutoComplete("@mines")
     public void onPrivateMineCreate(final BukkitCommandActor actor, @Named("configuration name") final String configName, @Optional @Named("target") Player target) {
 
         final Player player = target != null ? target : actor.requirePlayer();
@@ -77,5 +75,41 @@ public class BetterPrivateMinesCommand {
         }
 
         actor.getSender().sendMessage(ChatColor.GREEN + "The player has more than one mine. This is not implemented yet.");
+    }
+
+    @Subcommand("reset")
+    @CommandPermission("betterprivatemines.command.reset")
+    public void onPrivateMineReset(final BukkitCommandActor actor) {
+
+        final Position position = PositionAdapter.toPosition(actor.requirePlayer().getLocation());
+        final java.util.Optional<PrivateMine> optional = plugin.getPrivateMineManager().atPosition(position);
+
+        if(!optional.isPresent()) {
+            actor.getSender().sendMessage(ChatColor.RED + "You must be in your private mine to do this.");
+            return;
+        }
+
+        final PrivateMine privateMine = optional.get();
+
+        privateMine.reset();
+        actor.getSender().sendMessage(ChatColor.GREEN + "Reset en cours...");
+    }
+
+    @Subcommand("expand")
+    @CommandPermission("betterprivatemines.command.expand")
+    public void onPrivateMineExpand(final BukkitCommandActor actor, @Default("0") @Range(min = 1) int size) {
+
+        final Position position = PositionAdapter.toPosition(actor.requirePlayer().getLocation());
+        final java.util.Optional<PrivateMine> optional = plugin.getPrivateMineManager().atPosition(position);
+
+        if(!optional.isPresent()) {
+            actor.getSender().sendMessage(ChatColor.RED + "You must be in your private mine to do this.");
+            return;
+        }
+
+        final PrivateMine privateMine = optional.get();
+
+        privateMine.expand(size);
+        actor.getSender().sendMessage(ChatColor.GREEN + "You just expand your mine by " + size);
     }
 }

@@ -9,15 +9,15 @@ import org.bukkit.event.HandlerList;
 @Getter
 public class MineEnterEvent extends MineEvent implements Cancellable {
 
-    private final HandlerList HANDLER_LIST = new HandlerList();
-    private final Player who;
+    private final static HandlerList HANDLER_LIST = new HandlerList();
+    private final Player player;
     private final EnterManner manner;
 
     private boolean cancel = false;
 
     public MineEnterEvent(Player who, PrivateMine privateMine, EnterManner manner) {
         super(privateMine);
-        this.who = who;
+        this.player = who;
         this.manner = manner;
     }
 
@@ -36,7 +36,7 @@ public class MineEnterEvent extends MineEvent implements Cancellable {
         return HANDLER_LIST;
     }
 
-    public HandlerList getHandlerList() {
+    public static HandlerList getHandlerList() {
         return HANDLER_LIST;
     }
 

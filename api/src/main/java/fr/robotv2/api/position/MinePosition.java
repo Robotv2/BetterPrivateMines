@@ -3,9 +3,12 @@ package fr.robotv2.api.position;
 import com.google.common.collect.ArrayListMultimap;
 import fr.robotv2.api.vector.BoundingBox;
 import fr.robotv2.api.vector.Position;
+import lombok.extern.java.Log;
 
 import java.util.List;
+import java.util.logging.Logger;
 
+@Log
 public class MinePosition {
 
     private final ArrayListMultimap<MinePositionType, Position> positions = ArrayListMultimap.create();
@@ -31,6 +34,7 @@ public class MinePosition {
 
         for(MinePositionType type : MinePositionType.VALUES) {
             if(type.getExpected() > -1 && positions.get(type).size() != type.getExpected()) {
+                log.warning("For type " + type.name() + ": expected " + type.getExpected() + " but found " + positions.get(type).size());
                 return false;
             }
         }

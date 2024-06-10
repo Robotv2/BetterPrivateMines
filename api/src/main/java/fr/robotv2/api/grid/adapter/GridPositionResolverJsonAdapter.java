@@ -1,4 +1,4 @@
-package fr.robotv2.api.grid;
+package fr.robotv2.api.grid.adapter;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -8,10 +8,11 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import fr.robotv2.api.grid.GridPositionResolver;
 
 import java.lang.reflect.Type;
 
-public class GridJsonAdapter implements JsonSerializer<GridPositionResolver>, JsonDeserializer<GridPositionResolver> {
+public class GridPositionResolverJsonAdapter implements JsonSerializer<GridPositionResolver>, JsonDeserializer<GridPositionResolver> {
 
     private static final String CLASS_NAME = "CLASSNAME";
     private static final String DATA = "DATA";

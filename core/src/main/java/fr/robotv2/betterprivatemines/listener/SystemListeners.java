@@ -9,12 +9,16 @@ import fr.robotv2.betterprivatemines.event.MineLeaveEvent;
 import fr.robotv2.betterprivatemines.util.PositionAdapter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.entity.Player;
 
 import java.util.Optional;
 
@@ -47,29 +51,13 @@ public class SystemListeners implements Listener {
         final double blockZTo = event.getTo().getZ();
 
         if (blockXFrom != blockXTo || blockYFrom != blockYTo || blockZFrom != blockZTo) {
-
-            final Optional<PrivateMine> optionalMineFrom = plugin.getPrivateMineManager().atPosition(PositionAdapter.toPosition(event.getFrom()));
-            final Optional<PrivateMine> optionalMineTo = plugin.getPrivateMineManager().atPosition(PositionAdapter.toPosition(event.getTo()));
-
-            if (optionalMineFrom.isPresent() && !optionalMineTo.isPresent()) {
-
-                MineLeaveEvent mineLeaveEvent = new MineLeaveEvent(event.getPlayer(), optionalMineFrom.get(), MineLeaveEvent.LeaveManner.BORDER);
-                Bukkit.getPluginManager().callEvent(mineLeaveEvent);
-
-                if (mineLeaveEvent.isCancelled()) {
-                    event.setCancelled(true);
-                }
-
-            } else if (!optionalMineFrom.isPresent() && optionalMineTo.isPresent()) {
-
-                MineEnterEvent mineEnteredEvent = new MineEnterEvent(event.getPlayer(), optionalMineTo.get(), MineEnterEvent.EnterManner.BORDER);
-                Bukkit.getPluginManager().callEvent(mineEnteredEvent);
-
-                if (mineEnteredEvent.isCancelled()) {
-                    event.setCancelled(true);
-                }
-            }
+            handleFromTo(event.getPlayer(), event.getFrom(), event.getTo(), event, MineEnterEvent.EnterManner.BORDER, MineLeaveEvent.LeaveManner.BORDER);
         }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
+    public void onTeleport(final PlayerTeleportEvent event) {
+        handleFromTo(event.getPlayer(), event.getFrom(), event.getTo(), event, MineEnterEvent.EnterManner.TELEPORT, MineLeaveEvent.LeaveManner.TELEPORT);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
@@ -85,6 +73,31 @@ public class SystemListeners implements Listener {
 
             if(blockBreakInMineEvent.isCancel()) {
                 event.setCancelled(true);
+            }
+        }
+    }
+
+    private void handleFromTo(final Player player, Location from, Location to, Cancellable cancellable, MineEnterEvent.EnterManner joinManner, MineLeaveEvent.LeaveManner leaveManner) {
+
+        final Optional<PrivateMine> optionalMineFrom = plugin.getPrivateMineManager().atPosition(PositionAdapter.toPosition(from));
+        final Optional<PrivateMine> optionalMineTo = plugin.getPrivateMineManager().atPosition(PositionAdapter.toPosition(to));
+
+        if (optionalMineFrom.isPresent() && !optionalMineTo.isPresent()) {
+
+            MineLeaveEvent mineLeaveEvent = new MineLeaveEvent(player, optionalMineFrom.get(), leaveManner);
+            Bukkit.getPluginManager().callEvent(mineLeaveEvent);
+
+            if (mineLeaveEvent.isCancelled()) {
+                cancellable.setCancelled(true);
+            }
+
+        } else if (!optionalMineFrom.isPresent() && optionalMineTo.isPresent()) {
+
+            MineEnterEvent mineEnteredEvent = new MineEnterEvent(player, optionalMineTo.get(), joinManner);
+            Bukkit.getPluginManager().callEvent(mineEnteredEvent);
+
+            if (mineEnteredEvent.isCancelled()) {
+                cancellable.setCancelled(true);
             }
         }
     }

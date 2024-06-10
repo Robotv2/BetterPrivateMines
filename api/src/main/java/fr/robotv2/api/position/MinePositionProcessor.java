@@ -2,19 +2,23 @@ package fr.robotv2.api.position;
 
 import fr.robotv2.api.vector.BoundingBox;
 import lombok.experimental.UtilityClass;
+import lombok.extern.java.Log;
 
 @UtilityClass
+@Log
 public class MinePositionProcessor {
 
     public <T> MinePosition fromBoundingBox(BoundingBox boundingBox, MinePositionProcessorConfig<T> config) {
 
         final MinePosition minePosition = new MinePosition();
 
+        log.info("Creating mine from bounding box: " + boundingBox);
+
         boundingBox.forEach(position -> {
 
             final T value = config.getFunction().apply(position);
 
-            if(value == null) {
+            if(value == null || value.toString().equalsIgnoreCase("AIR")) {
                 return;
             }
 
@@ -24,6 +28,7 @@ public class MinePositionProcessor {
                 return;
             }
 
+            log.info(value + " is a position for " + positionType + " !");
             minePosition.setPosition(positionType, position);
         });
 

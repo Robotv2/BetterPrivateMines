@@ -13,13 +13,18 @@ public class Grid implements java.io.Serializable {
     private GridPosition lastPosition;
 
     @Getter
-    private final GridPositionResolver positionResolver;
+    private GridPositionResolver positionResolver;
 
-    private transient final ReentrantLock lock = new ReentrantLock();
+    private final transient ReentrantLock lock;
+
+    public Grid() {
+        this.lock = new ReentrantLock();
+    }
 
     public Grid(GridPosition initial, GridPositionResolver resolver) {
         this.lastPosition = initial;
         this.positionResolver = resolver;
+        this.lock = new ReentrantLock();
     }
 
     public static Grid createDefault() {

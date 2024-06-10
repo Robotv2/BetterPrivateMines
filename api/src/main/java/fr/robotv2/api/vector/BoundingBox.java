@@ -3,12 +3,16 @@ package fr.robotv2.api.vector;
 import fr.robotv2.api.bucket.Bucket;
 import fr.robotv2.api.bucket.factory.BucketFactory;
 import fr.robotv2.api.bucket.partitioning.PartitioningStrategies;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Objects;
 import java.util.function.Consumer;
 
 @Getter
+@ToString
+@EqualsAndHashCode
 public class BoundingBox implements java.io.Serializable {
 
     private final Position firstCorner;
@@ -43,11 +47,19 @@ public class BoundingBox implements java.io.Serializable {
         this.maxZ = Math.max(firstCorner.getZ(), secondCorner.getZ());
     }
 
+    public void checkValid() {
+        if (minX > maxX || minY > maxY || minZ > maxZ) {
+            throw new IllegalArgumentException("Min values must be less than or equal to max values.");
+        }
+    }
+
     public void forEach(Consumer<Position> consumer) {
-        for (int x = (int) minX; x <= maxX; x++) {
-            for (int y = (int) minY; y <= maxY; y++) {
-                for (int z = (int) minZ; z <= maxZ; z++) {
-                    consumer.accept(Position.of(worldName, x, y, z));
+        checkValid();
+        for (int x = (int) minX; x <= (int) maxX; x++) {
+            for (int y = (int) minY; y <= (int) maxY; y++) {
+                for (int z = (int) minZ; z <= (int) maxZ; z++) {
+                    Position position = Position.of(worldName, x, y, z);
+                    consumer.accept(position);
                 }
             }
         }
@@ -59,25 +71,27 @@ public class BoundingBox implements java.io.Serializable {
         return bucket;
     }
 
-    public BoundingBox innerBoundingBox(double diagonalSize) {
+    public BoundingBox innerBoundingBox(int size) {
+        if (size < 1) {
+            throw new IllegalArgumentException("Size must be at least 1");
+        }
 
         final Position center = center();
 
-        // Calculate half-length of the diagonal in 3D space
-        final double halfDiagonal = diagonalSize / 2.0;
-        final double halfSideLength = halfDiagonal / Math.sqrt(3);
+        // Calculate the offset from the center to the corners
+        final double halfSideLength = size - 1;
 
         final Position newFirstCorner = Position.of(
                 worldName,
                 center.getX() - halfSideLength,
-                center.getY() - halfSideLength,
+                getMinY(),
                 center.getZ() - halfSideLength
         );
 
         final Position newSecondCorner = Position.of(
                 worldName,
                 center.getX() + halfSideLength,
-                center.getY() + halfSideLength,
+                getMaxY(),
                 center.getZ() + halfSideLength
         );
 
