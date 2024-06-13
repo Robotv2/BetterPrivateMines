@@ -1,11 +1,14 @@
 package fr.robotv2.api.storage;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public interface CompletableStorage<ID, T extends Identifiable<ID>> {
 
     CompletableFuture<Optional<T>> select(ID id);
+
+    CompletableFuture<List<T>> selectAll();
 
     CompletableFuture<T> insert(T value);
 
@@ -25,13 +28,18 @@ public interface CompletableStorage<ID, T extends Identifiable<ID>> {
             }
 
             @Override
-            public CompletableFuture<Void> insert(T value) {
+            public CompletableFuture<List<T>> selectAll() {
+                return CompletableFuture.completedFuture(storageManager.selectAll());
+            }
+
+            @Override
+            public CompletableFuture<T> insert(T value) {
                 storageManager.insert(value);
                 return CompletableFuture.completedFuture(null);
             }
 
             @Override
-            public CompletableFuture<Void> update(ID id, T value) {
+            public CompletableFuture<T> update(ID id, T value) {
                 storageManager.update(id, value);
                 return CompletableFuture.completedFuture(null);
             }

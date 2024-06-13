@@ -16,10 +16,12 @@ public class Position implements java.io.Serializable {
         return Position.of(worldName, (this.X - x), (this.Y - y), (this.Z - z));
     }
 
+    @Contract("_, _, _ -> new")
     public Position add(double x, double y, double z) {
-        return Position.of(worldName, this.X + x, this.Y + y, this.Z + z);
+        return Position.of(worldName, (this.X + x), (this.Y + y), (this.Z + z));
     }
 
+    @Contract("-> new")
     public Position center() {
         return Position.of(worldName, this.X / 2, this.Y / 2, this.Z / 2);
     }

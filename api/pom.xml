@@ -17,6 +17,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -42,6 +49,11 @@
             <version>2.10.1</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.Robotv2</groupId>
+            <artifactId>Sarah</artifactId>
+            <version>21c73fdc14</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
-
 </project>

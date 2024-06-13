@@ -1,7 +1,10 @@
 package fr.robotv2.adapter;
 
 import com.cryptomorin.xseries.XMaterial;
-import com.sk89q.worldedit.*;
+import com.sk89q.worldedit.BlockVector;
+import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.blocks.BaseBlock;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
@@ -13,8 +16,8 @@ import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.registry.WorldData;
+import fr.robotv2.api.material.MineBlockSet;
 import fr.robotv2.api.material.MineMaterial;
-import fr.robotv2.api.mine.PrivateMineConfiguration;
 import fr.robotv2.api.vector.BoundingBox;
 import fr.robotv2.api.vector.Position;
 import fr.robotv2.api.worldedit.WorldEditAdapter;
@@ -39,7 +42,7 @@ public class LegacyWorldEditAdapter extends WorldEditAdapter<XMaterial> {
     }
 
     @Override
-    public void fillRandom(BoundingBox boundingBox, PrivateMineConfiguration<?> configuration, CompletableFuture<Void> future) {
+    public void fillRandom(BoundingBox boundingBox, MineBlockSet set, CompletableFuture<Void> future) {
 
     }
 

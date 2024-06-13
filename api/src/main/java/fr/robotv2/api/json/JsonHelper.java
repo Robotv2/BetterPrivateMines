@@ -1,9 +1,8 @@
 package fr.robotv2.api.json;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.gson.*;
+import fr.robotv2.api.json.post.PostProcessingEnabler;
 import fr.robotv2.api.storage.Identifiable;
 
 import java.io.*;
@@ -15,7 +14,11 @@ import java.util.logging.Logger;
 public abstract class JsonHelper<ID, T extends Identifiable<ID>> {
 
     private static final Logger LOGGER = Logger.getLogger(JsonHelper.class.getSimpleName());
-    private static final Gson GSON = new Gson();
+    private static final Gson GSON = new GsonBuilder()
+            .setPrettyPrinting()
+            .registerTypeAdapter(ArrayListMultimap.class, new MultiMapJsonAdapter<>())
+            .registerTypeAdapterFactory(new PostProcessingEnabler())
+            .create();
 
     private void writeToWriter(File file, Consumer<BufferedWriter> writeOperation) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {

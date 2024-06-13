@@ -6,7 +6,6 @@ import fr.robotv2.api.vector.Position;
 import lombok.extern.java.Log;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 @Log
 public class MinePosition {

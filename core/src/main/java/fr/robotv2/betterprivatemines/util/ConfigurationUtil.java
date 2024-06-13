@@ -2,6 +2,9 @@ package fr.robotv2.betterprivatemines.util;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import fr.robotv2.api.material.MineBlockSet;
+import fr.robotv2.api.material.MineMaterial;
+import fr.robotv2.api.material.MineMaterialRegistry;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Collections;
@@ -37,5 +40,33 @@ public class ConfigurationUtil {
         });
 
         return biMap;
+    }
+
+    public static Map<Integer, MineBlockSet> loadMineBlockSets(final ConfigurationSection section) {
+        if (section == null) return Collections.emptyMap();
+        final Map<Integer, MineBlockSet> levelSets = new HashMap<>();
+
+        section.getKeys(false).forEach(key -> {
+
+            Integer level = Integer.valueOf(key);
+            ConfigurationSection innerSection = section.getConfigurationSection(key);
+
+            if (innerSection != null) {
+
+                MineBlockSet mineBlockSet = new MineBlockSet();
+
+                innerSection.getKeys(false).forEach(materialKey -> {
+
+                    MineMaterial material = MineMaterialRegistry.resolve(materialKey);
+                    double chance = innerSection.getDouble(materialKey);
+                    mineBlockSet.addChance(material, chance);
+
+                });
+
+                levelSets.put(level, mineBlockSet);
+            }
+        });
+
+        return levelSets;
     }
 }

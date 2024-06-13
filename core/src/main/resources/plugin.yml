@@ -1,5 +1,7 @@
 name: BetterPrivateMines
 version: '${version}'
 main: fr.robotv2.betterprivatemines.BetterPrivateMines
+softdepend:
+  - "Oraxen"
 depend:
   - "WorldEdit"

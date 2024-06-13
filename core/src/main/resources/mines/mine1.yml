@@ -1,0 +1,15 @@
+schematic: mine_end.schem
+
+initial_size: 9
+
+positions:
+  mine_corner: BLUE_WOOL
+
+reset:
+  type: GRADUAL
+  max_block_per_tick: 20
+
+materials:
+  1:
+    STONE: 80
+    COBBLESTONE: 20

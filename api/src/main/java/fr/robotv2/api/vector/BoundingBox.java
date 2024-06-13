@@ -3,34 +3,40 @@ package fr.robotv2.api.vector;
 import fr.robotv2.api.bucket.Bucket;
 import fr.robotv2.api.bucket.factory.BucketFactory;
 import fr.robotv2.api.bucket.partitioning.PartitioningStrategies;
+import fr.robotv2.api.json.post.PostProcessable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.DelayQueue;
 import java.util.function.Consumer;
 
 @Getter
 @ToString
 @EqualsAndHashCode
-public class BoundingBox implements java.io.Serializable {
+public class BoundingBox implements java.io.Serializable, PostProcessable {
 
-    private final Position firstCorner;
+    private Position firstCorner;
 
-    private final Position secondCorner;
+    private Position secondCorner;
 
     // pre-calculation
 
-    protected final transient String worldName;
+    protected transient String worldName;
 
-    protected final transient double minX;
-    protected final transient double maxX;
-    protected final transient double minY;
-    protected final transient double maxY;
-    protected final transient double minZ;
-    protected final transient double maxZ;
+    protected transient double minX;
+    protected transient double maxX;
+    protected transient double minY;
+    protected transient double maxY;
+    protected transient double minZ;
+    protected transient double maxZ;
 
-    public BoundingBox(Position firstCorner, Position secondCorner) {
+    protected transient int totalSize = 0;
+
+    public BoundingBox(final Position firstCorner, final Position secondCorner) {
         this.firstCorner = firstCorner;
         this.secondCorner = secondCorner;
 
@@ -38,6 +44,12 @@ public class BoundingBox implements java.io.Serializable {
             throw new IllegalArgumentException("Both corners must be in the same world");
         }
 
+        checkValid();
+        postProcess();
+    }
+
+    @Override
+    public void postProcess() {
         this.worldName = firstCorner.getWorldName();
         this.minX = Math.min(firstCorner.getX(), secondCorner.getX());
         this.maxX = Math.max(firstCorner.getX(), secondCorner.getX());
@@ -45,6 +57,15 @@ public class BoundingBox implements java.io.Serializable {
         this.maxY = Math.max(firstCorner.getY(), secondCorner.getY());
         this.minZ = Math.min(firstCorner.getZ(), secondCorner.getZ());
         this.maxZ = Math.max(firstCorner.getZ(), secondCorner.getZ());
+
+        for (int x = (int) minX; x <= (int) maxX; x++) {
+            for (int y = (int) minY; y <= (int) maxY; y++) {
+                for (int z = (int) minZ; z <= (int) maxZ; z++) {
+                    this.totalSize++;
+                }
+            }
+        }
+
     }
 
     public void checkValid() {
@@ -54,7 +75,6 @@ public class BoundingBox implements java.io.Serializable {
     }
 
     public void forEach(Consumer<Position> consumer) {
-        checkValid();
         for (int x = (int) minX; x <= (int) maxX; x++) {
             for (int y = (int) minY; y <= (int) maxY; y++) {
                 for (int z = (int) minZ; z <= (int) maxZ; z++) {
@@ -66,7 +86,7 @@ public class BoundingBox implements java.io.Serializable {
     }
 
     public Bucket<Position> asBucket(int maxBlockPerTick) {
-        final Bucket<Position> bucket = BucketFactory.newConcurrentBucket(maxBlockPerTick, PartitioningStrategies.nextInCycle());
+        final Bucket<Position> bucket = BucketFactory.newBucket(Math.floorDiv(totalSize, maxBlockPerTick) + 1, PartitioningStrategies.nextInCycle(), ConcurrentHashMap::newKeySet);
         forEach(bucket::add);
         return bucket;
     }

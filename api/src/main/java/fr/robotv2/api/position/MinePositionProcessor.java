@@ -16,9 +16,9 @@ public class MinePositionProcessor {
 
         boundingBox.forEach(position -> {
 
-            final T value = config.getFunction().apply(position);
+            final T value = config.getPositionToValueFunction().apply(position);
 
-            if(value == null || value.toString().equalsIgnoreCase("AIR")) {
+            if(value == null || value.toString().contains("AIR")) {
                 return;
             }
 
@@ -28,8 +28,8 @@ public class MinePositionProcessor {
                 return;
             }
 
-            log.info(value + " is a position for " + positionType + " !");
             minePosition.setPosition(positionType, position);
+            config.getClearPositionConsumer().accept(position);
         });
 
         if(!minePosition.isValid()) {

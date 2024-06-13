@@ -38,7 +38,6 @@ public final class PrivateMineFactory {
             final PrivateMine privateMine = new PrivateMine(
                     playerId,
                     configuration.getConfigurationName(),
-                    plugin.getPrivateMineConfigurationManager(),
                     minePosition,
                     boundingBox
             );

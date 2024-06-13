@@ -18,8 +18,8 @@ import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.block.BlockState;
+import fr.robotv2.api.material.MineBlockSet;
 import fr.robotv2.api.material.MineMaterial;
-import fr.robotv2.api.mine.PrivateMineConfiguration;
 import fr.robotv2.api.vector.BoundingBox;
 import fr.robotv2.api.vector.Position;
 import fr.robotv2.api.worldedit.WorldEditAdapter;
@@ -46,7 +46,7 @@ public class LatestWorldEditAdapter extends WorldEditAdapter<XMaterial> {
     }
 
     @Override
-    public void fillRandom(BoundingBox boundingBox, PrivateMineConfiguration<?> configuration, CompletableFuture<Void> future) {
+    public void fillRandom(BoundingBox boundingBox, MineBlockSet set, CompletableFuture<Void> future) {
 
         final World world = Bukkit.getWorld(boundingBox.getWorldName());
 
@@ -57,7 +57,7 @@ public class LatestWorldEditAdapter extends WorldEditAdapter<XMaterial> {
         final RandomPattern randomPattern = new RandomPattern();
         double air = 1;
 
-        for(Map.Entry<MineMaterial, Double> entry : configuration.getMaterials().entrySet()) {
+        for(Map.Entry<MineMaterial, Double> entry : set.getDelegate().entrySet()) {
 
             final XMaterial xMaterial = this.resolver.apply(entry.getKey());
             final BlockState block = BukkitAdapter.adapt(Objects.requireNonNull(xMaterial.parseMaterial()).createBlockData());

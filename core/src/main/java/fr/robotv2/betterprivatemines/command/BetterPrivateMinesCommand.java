@@ -28,7 +28,7 @@ public class BetterPrivateMinesCommand {
     @CommandPermission("betterprivatemines.command.reload")
     public void onReload(final BukkitCommandActor actor) {
         plugin.onReload();
-        actor.getSender().sendMessage(ChatColor.GREEN + "The plugin has been reloaded successfully.");
+        actor.reply(ChatColor.GREEN + "The plugin has been reloaded successfully.");
     }
 
     @Subcommand("create")
@@ -46,10 +46,9 @@ public class BetterPrivateMinesCommand {
 
         plugin.getPrivateMineFactory().newPrivateMine(player.getUniqueId(), configuration, configuration.getMineProcessorConfig())
                 .thenAccept(privateMine -> {
-                    actor.getSender().sendMessage(ChatColor.GREEN + "The private mine was created successfully for " + player.getName() + ".");
-                    plugin.getPrivateMineManager().register(privateMine);
+                    actor.reply(ChatColor.GREEN + "The private mine was created successfully for " + player.getName() + ".");
                 }).exceptionally(throwable -> {
-                    actor.getSender().sendMessage(ChatColor.RED + "An error occurred while creating the private mine. Please contact an admin.");
+                    actor.reply(ChatColor.RED + "An error occurred while creating the private mine. Please contact an admin.");
                     plugin.getLogger().log(Level.SEVERE, "An error occurred while creating a private mine.", throwable);
                     return null;
                 });
@@ -74,7 +73,7 @@ public class BetterPrivateMinesCommand {
             return;
         }
 
-        actor.getSender().sendMessage(ChatColor.GREEN + "The player has more than one mine. This is not implemented yet.");
+        actor.reply(ChatColor.GREEN + "The player has more than one mine. This is not implemented yet.");
     }
 
     @Subcommand("reset")
@@ -85,14 +84,19 @@ public class BetterPrivateMinesCommand {
         final java.util.Optional<PrivateMine> optional = plugin.getPrivateMineManager().atPosition(position);
 
         if(!optional.isPresent()) {
-            actor.getSender().sendMessage(ChatColor.RED + "You must be in your private mine to do this.");
+            actor.reply(ChatColor.RED + "You must be in your private mine to do this.");
             return;
         }
 
         final PrivateMine privateMine = optional.get();
 
+        if(privateMine.getIsBeingReset().get()) {
+            actor.reply(ChatColor.RED + "Please wait for your mine to finish resetting before resetting again.");
+            return;
+        }
+
         privateMine.reset();
-        actor.getSender().sendMessage(ChatColor.GREEN + "Reset en cours...");
+        actor.reply(ChatColor.GREEN + "This mine will be reset.");
     }
 
     @Subcommand("expand")
@@ -103,13 +107,13 @@ public class BetterPrivateMinesCommand {
         final java.util.Optional<PrivateMine> optional = plugin.getPrivateMineManager().atPosition(position);
 
         if(!optional.isPresent()) {
-            actor.getSender().sendMessage(ChatColor.RED + "You must be in your private mine to do this.");
+            actor.reply(ChatColor.RED + "You must be in your private mine to do this.");
             return;
         }
 
         final PrivateMine privateMine = optional.get();
 
         privateMine.expand(size);
-        actor.getSender().sendMessage(ChatColor.GREEN + "You just expand your mine by " + size);
+        actor.reply(ChatColor.GREEN + "You just expand your mine by " + size);
     }
 }

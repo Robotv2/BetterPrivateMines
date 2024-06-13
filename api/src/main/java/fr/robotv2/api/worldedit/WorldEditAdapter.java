@@ -1,7 +1,7 @@
 package fr.robotv2.api.worldedit;
 
+import fr.robotv2.api.material.MineBlockSet;
 import fr.robotv2.api.material.MineMaterial;
-import fr.robotv2.api.mine.PrivateMineConfiguration;
 import fr.robotv2.api.vector.BoundingBox;
 import fr.robotv2.api.vector.Position;
 
@@ -34,7 +34,7 @@ public abstract class WorldEditAdapter<T> {
         return (WorldEditAdapter<T>) adapter;
     }
 
-    public abstract void fillRandom(BoundingBox boundingBox, PrivateMineConfiguration<?> configuration, CompletableFuture<Void> future);
+    public abstract void fillRandom(BoundingBox boundingBox, MineBlockSet set, CompletableFuture<Void> future);
 
     public abstract void fill(BoundingBox boundingBox, T material, CompletableFuture<Void> future);
 
