@@ -56,7 +56,7 @@ public class BetterPrivateMinesCommand {
 
     @Subcommand("teleport")
     @CommandPermission("betterprivatemines.command.teleport")
-    public void onPrivateMineTeleport(final BukkitCommandActor actor, @Named("player") @Optional OfflinePlayer offlinePlayer, @Named("configuration name") @Optional String mineName) {
+    public void onPrivateMineTeleport(final BukkitCommandActor actor, @Named("mine's name") @Optional String mineName, @Named("player") @Optional OfflinePlayer offlinePlayer) {
 
         final UUID ownerId = offlinePlayer != null ? offlinePlayer.getUniqueId() : actor.requirePlayer().getUniqueId();
         final List<PrivateMine> mines = plugin.getPrivateMineManager().ofPlayer(ownerId);
@@ -73,7 +73,21 @@ public class BetterPrivateMinesCommand {
             return;
         }
 
-        actor.reply(ChatColor.GREEN + "The player has more than one mine. This is not implemented yet.");
+        if(mineName != null) {
+
+            for (PrivateMine mine : mines) {
+                if (mine.getMineName().equalsIgnoreCase(mineName)) {
+                    final Position position = mine.getMinePosition().getFirst(MinePositionType.SPAWN_POINT);
+                    actor.requirePlayer().teleport(PositionAdapter.fromPosition(position));
+                    return;
+                }
+            }
+
+            actor.getSender().sendMessage(ChatColor.RED + "No mine found with the specified name.");
+            return;
+        }
+
+        actor.reply(ChatColor.RED + "The player has more than one mine. Please specify a mine name.");
     }
 
     @Subcommand("reset")
